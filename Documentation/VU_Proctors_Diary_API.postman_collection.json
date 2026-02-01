@@ -1,0 +1,1486 @@
+{
+	"info": {
+		"_postman_id": "vu-proctors-diary-api",
+		"name": "VU Proctors Diary API",
+		"description": "Complete API collection for VU Proctors Diary Management System\n\n**Base URL**: `http://localhost:5000/api`\n\n**Authentication**: Most endpoints require Bearer token authentication. Use the Login endpoint to get a token, then set it in the Authorization header.\n\n**Setup Instructions**:\n1. Import this collection into Postman\n2. Create an environment variable `base_url` with value `http://localhost:5000/api`\n3. Create an environment variable `token` (will be auto-set after login)\n4. Start with Authentication endpoints to get your token",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"cnic\": \"12345-1234567-1\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"invigilator\",\n  \"preferredCenter\": [\"Center A\", \"Center B\"],\n  \"qualification\": \"Masters\",\n  \"contact\": \"+923001234567\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new user (invigilator, superintendent, or admin). Admin users can login immediately without approval."
+					},
+					"response": []
+				},
+				{
+					"name": "Register Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Admin User\",\n  \"cnic\": \"12345-1234567-2\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\",\n  \"role\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new admin user. Admin users can login immediately without approval."
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('token', response.token);",
+									"    pm.environment.set('userId', response.user.id);",
+									"    pm.environment.set('userRole', response.user.role);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login and get authentication token. Token is automatically saved to environment variable."
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for user registration and login"
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Get Pending Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/pending",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"pending"
+							]
+						},
+						"description": "Get all pending user approval requests (invigilators and superintendents)"
+					},
+					"response": []
+				},
+				{
+					"name": "Approve User",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/approve/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"approve",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "USER_ID_HERE",
+									"description": "User ID to approve"
+								}
+							]
+						},
+						"description": "Approve a pending user"
+					},
+					"response": []
+				},
+				{
+					"name": "Reject User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/reject/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"reject",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "USER_ID_HERE",
+									"description": "User ID to reject"
+								}
+							]
+						},
+						"description": "Reject and delete a pending user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Available Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/available?date=2024-12-25&timeSlot=Morning (09:00-12:00)&role=invigilator",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"available"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2024-12-25",
+									"description": "Date in YYYY-MM-DD format"
+								},
+								{
+									"key": "timeSlot",
+									"value": "Morning (09:00-12:00)",
+									"description": "Time slot: Morning (09:00-12:00), Afternoon (13:00-16:00), Evening (17:00-20:00), Full Day (09:00-17:00)"
+								},
+								{
+									"key": "role",
+									"value": "invigilator",
+									"description": "User role: invigilator or superintendent"
+								}
+							]
+						},
+						"description": "Get users available for duty assignment on a specific date and time slot"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"users"
+							]
+						},
+						"description": "Get all users (approved and pending, excluding admins)"
+					},
+					"response": []
+				}
+			],
+			"description": "Admin-only endpoints for user management"
+		},
+		{
+			"name": "Duties",
+			"item": [
+				{
+					"name": "Admin - Assign Duty",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"examName\": \"Final Exam 2024\",\n  \"date\": \"2024-12-25\",\n  \"timeSlot\": \"Morning (09:00-12:00)\",\n  \"center\": \"Center A\",\n  \"description\": \"Final examination invigilation\",\n  \"paymentType\": \"full\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/duties/assign/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"duties",
+								"assign",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "USER_ID_HERE",
+									"description": "User ID to assign duty to"
+								}
+							]
+						},
+						"description": "Assign a duty to a user. Payment types: full (2000), half (1200), afternoon (1000), other (800)"
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Get All Duties",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/duties?page=1&limit=10&date=2024-12-25&center=Center A&role=invigilator",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"duties"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "date",
+									"value": "2024-12-25",
+									"description": "Filter by date (YYYY-MM-DD)"
+								},
+								{
+									"key": "center",
+									"value": "Center A",
+									"description": "Filter by center"
+								},
+								{
+									"key": "role",
+									"value": "invigilator",
+									"description": "Filter by role"
+								},
+								{
+									"key": "userId",
+									"value": "",
+									"description": "Filter by user ID",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Get all duties with optional filters (admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Get Attendance Report",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/duties/report?date=2024-12-25&examName=Final Exam 2024&center=Center A&timeSlot=Morning (09:00-12:00)",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"duties",
+								"report"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2024-12-25",
+									"description": "Filter by date"
+								},
+								{
+									"key": "examName",
+									"value": "Final Exam 2024",
+									"description": "Filter by exam name"
+								},
+								{
+									"key": "center",
+									"value": "Center A",
+									"description": "Filter by center"
+								},
+								{
+									"key": "timeSlot",
+									"value": "Morning (09:00-12:00)",
+									"description": "Filter by time slot"
+								}
+							]
+						},
+						"description": "Get attendance report with statistics and breakdown"
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Approve Payments",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"dutyIds\": [\"DUTY_ID_1\", \"DUTY_ID_2\"],\n  \"approveAll\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/duties/payments/approve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"duties",
+								"payments",
+								"approve"
+							]
+						},
+						"description": "Approve payments for specific duties or all eligible duties"
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Auto Mark Absentees",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/duties/auto/absentees",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"duties",
+								"auto",
+								"absentees"
+							]
+						},
+						"description": "Automatically mark absentees for past duties where attendance was not marked"
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Verify Attendance",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"action\": \"verify\",\n  \"note\": \"Attendance verified\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/duties/attendance/:dutyId/verify",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"duties",
+								"attendance",
+								":dutyId",
+								"verify"
+							],
+							"variable": [
+								{
+									"key": "dutyId",
+									"value": "DUTY_ID_HERE",
+									"description": "Duty ID"
+								}
+							]
+						},
+						"description": "Verify attendance. Actions: verify, excuse, reject"
+					},
+					"response": []
+				},
+				{
+					"name": "User - Get My Duties",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/duties/me?page=1&limit=10&status=pending",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"duties",
+								"me"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "status",
+									"value": "pending",
+									"description": "Filter by status: pending, present, late, absent, excused, all"
+								}
+							]
+						},
+						"description": "Get current user's duties with pagination"
+					},
+					"response": []
+				},
+				{
+					"name": "User - Mark Attendance",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/duties/attendance/:dutyId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"duties",
+								"attendance",
+								":dutyId"
+							],
+							"variable": [
+								{
+									"key": "dutyId",
+									"value": "DUTY_ID_HERE",
+									"description": "Duty ID to mark attendance for"
+								}
+							]
+						},
+						"description": "Mark attendance for a duty"
+					},
+					"response": []
+				},
+				{
+					"name": "User - Upload Report",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "dutyId",
+									"value": "DUTY_ID_HERE",
+									"type": "text"
+								},
+								{
+									"key": "reportFor",
+									"value": "duty",
+									"type": "text",
+									"description": "Type: duty or monthly"
+								},
+								{
+									"key": "title",
+									"value": "Report Title",
+									"type": "text"
+								},
+								{
+									"key": "comments",
+									"value": "Report comments",
+									"type": "text"
+								},
+								{
+									"key": "month",
+									"value": "2024-12",
+									"type": "text",
+									"description": "Required for monthly reports (YYYY-MM)",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/duties/reports/upload",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"duties",
+								"reports",
+								"upload"
+							]
+						},
+						"description": "Upload a report file for a duty or monthly report"
+					},
+					"response": []
+				},
+				{
+					"name": "User - Get Duty Stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/duties/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"duties",
+								"stats"
+							]
+						},
+						"description": "Get duty statistics for dashboard (admin sees all, users see their own)"
+					},
+					"response": []
+				}
+			],
+			"description": "Duty management endpoints"
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"profile"
+							]
+						},
+						"description": "Get current user's profile"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Updated Name",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "updated@example.com",
+									"type": "text"
+								},
+								{
+									"key": "contact",
+									"value": "+923001234567",
+									"type": "text"
+								},
+								{
+									"key": "qualification",
+									"value": "Masters",
+									"type": "text"
+								},
+								{
+									"key": "preferredCenter",
+									"value": "[\"Center A\", \"Center B\"]",
+									"type": "text",
+									"description": "JSON array as string"
+								},
+								{
+									"key": "unavailableDates",
+									"value": "[\"2024-12-25\", \"2024-12-26\"]",
+									"type": "text",
+									"description": "JSON array of dates as string"
+								},
+								{
+									"key": "password",
+									"value": "newpassword123",
+									"type": "text",
+									"description": "New password (optional)"
+								},
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": [],
+									"description": "Profile picture (optional)"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"profile"
+							]
+						},
+						"description": "Update user profile. All fields are optional."
+					},
+					"response": []
+				}
+			],
+			"description": "User profile management endpoints"
+		},
+		{
+			"name": "Leaves",
+			"item": [
+				{
+					"name": "Request Leave",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"dutyId\": \"DUTY_ID_HERE\",\n  \"reason\": \"Medical emergency\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/leaves/request",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"leaves",
+								"request"
+							]
+						},
+						"description": "Request leave for a duty"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Leave Requests",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/leaves?status=pending&dutyId=DUTY_ID&userId=USER_ID",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"leaves"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending",
+									"description": "Filter by status: pending, approved, rejected"
+								},
+								{
+									"key": "dutyId",
+									"value": "DUTY_ID",
+									"description": "Filter by duty ID",
+									"disabled": true
+								},
+								{
+									"key": "userId",
+									"value": "USER_ID",
+									"description": "Filter by user ID (admin only)",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Get leave requests (admin sees all, users see their own)"
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Review Leave Request",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"action\": \"approve\",\n  \"adminComment\": \"Approved due to medical emergency\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/leaves/:id/status",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"leaves",
+								":id",
+								"status"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "LEAVE_REQUEST_ID_HERE",
+									"description": "Leave request ID"
+								}
+							]
+						},
+						"description": "Approve or reject a leave request. Actions: approve, reject"
+					},
+					"response": []
+				}
+			],
+			"description": "Leave request management endpoints"
+		},
+		{
+			"name": "Withdrawals",
+			"item": [
+				{
+					"name": "Get Payment Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/withdrawals/summary",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"withdrawals",
+								"summary"
+							]
+						},
+						"description": "Get payment summary including total earnings, paid amount, and available balance"
+					},
+					"response": []
+				},
+				{
+					"name": "Request Withdrawal",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 5000,\n  \"paymentMethod\": \"bank_transfer\",\n  \"accountDetails\": {\n    \"bankName\": \"ABC Bank\",\n    \"accountNumber\": \"1234567890\",\n    \"accountTitle\": \"John Doe\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/withdrawals/request",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"withdrawals",
+								"request"
+							]
+						},
+						"description": "Request withdrawal. Payment methods: bank_transfer, easypaisa, jazzcash, cash"
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Withdrawals",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/withdrawals/my-withdrawals?page=1&limit=10&status=pending",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"withdrawals",
+								"my-withdrawals"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "status",
+									"value": "pending",
+									"description": "Filter by status: pending, approved, rejected, processed, all"
+								}
+							]
+						},
+						"description": "Get current user's withdrawal history"
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Get All Withdrawals",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/withdrawals/admin/withdrawals?page=1&limit=10&status=pending",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"withdrawals",
+								"admin",
+								"withdrawals"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "status",
+									"value": "pending",
+									"description": "Filter by status: pending, approved, rejected, processed, all"
+								}
+							]
+						},
+						"description": "Get all withdrawal requests (admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Process Withdrawal",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"action\": \"approve\",\n  \"adminNotes\": \"Approved for processing\",\n  \"transactionId\": \"TXN123456\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/withdrawals/admin/process/:withdrawalId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"withdrawals",
+								"admin",
+								"process",
+								":withdrawalId"
+							],
+							"variable": [
+								{
+									"key": "withdrawalId",
+									"value": "WITHDRAWAL_ID_HERE",
+									"description": "Withdrawal ID"
+								}
+							]
+						},
+						"description": "Process withdrawal request. Actions: approve, reject, mark_processed"
+					},
+					"response": []
+				}
+			],
+			"description": "Withdrawal and payment management endpoints"
+		},
+		{
+			"name": "Attendance",
+			"item": [
+				{
+					"name": "Admin - Generate Attendance Report",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/attendance/reports/generate?examName=Final Exam 2024&center=Center A&timeSlot=Morning (09:00-12:00)&startDate=2024-12-01&endDate=2024-12-31&generateNew=false",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"attendance",
+								"reports",
+								"generate"
+							],
+							"query": [
+								{
+									"key": "examName",
+									"value": "Final Exam 2024",
+									"description": "Exam name"
+								},
+								{
+									"key": "center",
+									"value": "Center A",
+									"description": "Center name"
+								},
+								{
+									"key": "timeSlot",
+									"value": "Morning (09:00-12:00)",
+									"description": "Time slot"
+								},
+								{
+									"key": "startDate",
+									"value": "2024-12-01",
+									"description": "Start date (YYYY-MM-DD)"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-12-31",
+									"description": "End date (YYYY-MM-DD)"
+								},
+								{
+									"key": "generateNew",
+									"value": "false",
+									"description": "Set to true to force new report generation"
+								}
+							]
+						},
+						"description": "Generate comprehensive attendance report"
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Get All Attendance Reports",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/attendance/reports?page=1&limit=10&sortBy=generatedAt&sortOrder=desc",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"attendance",
+								"reports"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "sortBy",
+									"value": "generatedAt",
+									"description": "Sort field"
+								},
+								{
+									"key": "sortOrder",
+									"value": "desc",
+									"description": "Sort order: asc or desc"
+								}
+							]
+						},
+						"description": "Get all attendance reports with pagination"
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Get Attendance Report by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/attendance/reports/:reportId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"attendance",
+								"reports",
+								":reportId"
+							],
+							"variable": [
+								{
+									"key": "reportId",
+									"value": "REPORT_ID_HERE",
+									"description": "Attendance report ID"
+								}
+							]
+						},
+						"description": "Get specific attendance report by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Export Attendance Report (CSV)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/attendance/reports/:reportId/export",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"attendance",
+								"reports",
+								":reportId",
+								"export"
+							],
+							"variable": [
+								{
+									"key": "reportId",
+									"value": "REPORT_ID_HERE",
+									"description": "Attendance report ID"
+								}
+							]
+						},
+						"description": "Export attendance report as CSV file"
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Get Attendance Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/attendance/dashboard",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"attendance",
+								"dashboard"
+							]
+						},
+						"description": "Get real-time attendance dashboard data"
+					},
+					"response": []
+				}
+			],
+			"description": "Attendance reporting and analytics endpoints (admin only)"
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Get Notifications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications?page=1&limit=20&unreadOnly=false",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								},
+								{
+									"key": "unreadOnly",
+									"value": "false",
+									"description": "Set to true to get only unread notifications"
+								}
+							]
+						},
+						"description": "Get user's notifications with pagination"
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Notification as Read",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications/:notificationId/read",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications",
+								":notificationId",
+								"read"
+							],
+							"variable": [
+								{
+									"key": "notificationId",
+									"value": "NOTIFICATION_ID_HERE",
+									"description": "Notification ID"
+								}
+							]
+						},
+						"description": "Mark a notification as read"
+					},
+					"response": []
+				},
+				{
+					"name": "Mark All Notifications as Read",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications/read-all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications",
+								"read-all"
+							]
+						},
+						"description": "Mark all notifications as read"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Notification",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications/:notificationId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications",
+								":notificationId"
+							],
+							"variable": [
+								{
+									"key": "notificationId",
+									"value": "NOTIFICATION_ID_HERE",
+									"description": "Notification ID"
+								}
+							]
+						},
+						"description": "Delete a specific notification"
+					},
+					"response": []
+				},
+				{
+					"name": "Clear All Notifications",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications"
+							]
+						},
+						"description": "Delete all notifications for current user"
+					},
+					"response": []
+				}
+			],
+			"description": "Notification management endpoints"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
+
