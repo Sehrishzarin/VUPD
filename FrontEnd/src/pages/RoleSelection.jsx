@@ -469,7 +469,7 @@ const RoleSelection = () => {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button className="gradient-btn">
                 <Github size={20} />
-                <a href="https://github.com/Sehrishzarin/Vu-Proctors-Diary">
+                <a href="https://github.com/Sehrishzarin/VUPD">
                 <span>Source Code</span></a>
               </Button>
             </motion.div>
@@ -751,7 +751,7 @@ const RoleSelection = () => {
               <span>VU Proctors Diary</span>
             </div>
           </motion.div>
-          <p>© {new Date().getFullYear()} Virtual University Project</p>
+          <p>© 2025 Virtual University Project</p>
           <p>Comprehensive examination management system</p>
           <p style={{ marginTop: '1rem', fontSize: '0.875rem', color: 'var(--gray-text)' }}>
             Streamlining exam management for academic excellence
