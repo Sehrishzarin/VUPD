@@ -1,0 +1,482 @@
+/* Minimal Modern Split-Screen Login Layout - v2.0 */
+.superintendent-login-layout {
+  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.superintendent-login-content {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Split Container - 50/50 layout */
+.split-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+/* Left Side - Promotional Content (50%) */
+.promo-side {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 80px;
+  position: relative;
+  background: #0b5ed7;
+  color: white;
+  overflow-y: auto;
+}
+
+.promo-content {
+  max-width: 500px;
+}
+
+.promo-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.promo-icon {
+  font-size: 48px;
+  color: white;
+}
+
+.promo-title {
+  color: white !important;
+  font-size: 42px !important;
+  font-weight: 700 !important;
+  margin-bottom: 20px !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.5px;
+}
+
+.promo-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 17px;
+  line-height: 1.6;
+  margin-bottom: 50px;
+  display: block;
+}
+
+.features-list {
+  margin-bottom: 50px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  gap: 16px;
+}
+
+.feature-icon {
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.95);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.feature-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.feature-item .ant-typography {
+  color: white !important;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.feature-desc {
+  color: rgba(255, 255, 255, 0.75) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+}
+
+.promo-footer {
+  margin-top: 60px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.trust-badge .ant-typography {
+  color: white !important;
+}
+
+.star-icon {
+  font-size: 18px;
+  color: #ffd700;
+}
+
+/* Right Side - Login Form (50%) */
+.form-side {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 80px;
+  background: #ffffff;
+  overflow-y: auto;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 520px;
+  transition: none !important;
+}
+
+.form-container:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.login-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 520px;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+  background: transparent;
+  border: none;
+  transition: none !important;
+}
+
+.login-card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-top: 0;
+}
+
+.login-title {
+  color: #0b5ed7 !important;
+  margin-bottom: 8px !important;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -0.3px;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #0b5ed7 !important;
+  background-clip: unset !important;
+}
+
+.superintendent-logo {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  background: #0b5ed7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 2px 8px rgba(11, 94, 215, 0.2);
+}
+
+.logo-icon {
+  font-size: 32px;
+  color: white;
+}
+
+.login-button {
+  height: 48px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  background: #0b5ed7;
+  border-color: #0b5ed7;
+  transition: background-color 0.2s ease, border-color 0.2s ease !important;
+  transform: none !important;
+}
+
+.login-button:hover,
+.login-button:focus,
+.login-button:active {
+  background: #0a58ca !important;
+  border-color: #0a58ca !important;
+  transform: none !important;
+  box-shadow: none !important;
+  translate: none !important;
+}
+
+.back-button {
+  color: #0b5ed7;
+  transition: none !important;
+  text-decoration: none;
+}
+
+.back-button:hover {
+  color: #0a58ca;
+  transform: none !important;
+  text-decoration: none;
+}
+
+.register-link {
+  text-align: center;
+  display: block;
+  color: #0b5ed7;
+  font-weight: 500;
+  text-decoration: none;
+  transition: none !important;
+}
+
+.register-link:hover {
+  color: #0a58ca;
+  text-decoration: none;
+  transform: none !important;
+}
+
+.additional-options {
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Form Styling */
+.ant-form-item {
+  margin-bottom: 20px;
+}
+
+.ant-form-item-label > label {
+  font-weight: 500;
+  color: #374151;
+  font-size: 14px;
+}
+
+.ant-input-affix-wrapper {
+  border-radius: 8px;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  transition: border-color 0.2s ease;
+  font-size: 15px;
+}
+
+.ant-input-affix-wrapper:hover {
+  border-color: #0b5ed7;
+}
+
+.ant-input-affix-wrapper-focused {
+  border-color: #0b5ed7;
+  box-shadow: 0 0 0 3px rgba(11, 94, 215, 0.1);
+}
+
+.ant-input-prefix {
+  margin-right: 10px;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+.ant-input {
+  font-size: 15px;
+}
+
+.ant-input-password-icon {
+  color: #6b7280;
+}
+
+.ant-input-password-icon:hover {
+  color: #0b5ed7;
+}
+
+.ant-card-body {
+  padding: 0 !important;
+}
+
+.ant-divider {
+  margin: 32px 0;
+  border-color: #e5e7eb;
+  opacity: 0.5;
+}
+
+.ant-alert {
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .split-container {
+    flex-direction: column;
+  }
+
+  .promo-side {
+    width: 100%;
+    padding: 40px 40px;
+    min-height: auto;
+  }
+
+  .form-side {
+    width: 100%;
+    padding: 30px 20px;
+  }
+
+  .promo-title {
+    font-size: 36px !important;
+  }
+
+  .promo-subtitle {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .promo-side {
+    padding: 30px 24px;
+  }
+
+  .promo-title {
+    font-size: 28px !important;
+  }
+
+  .promo-subtitle {
+    font-size: 15px;
+    margin-bottom: 30px;
+  }
+
+  .promo-logo {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 30px;
+  }
+
+  .promo-icon {
+    font-size: 36px;
+  }
+
+  .feature-item {
+    margin-bottom: 24px;
+  }
+
+  .form-side {
+    padding: 20px 16px;
+  }
+
+  .ant-card-body {
+    padding: 32px 24px !important;
+  }
+
+  .login-title {
+    font-size: 24px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .promo-side {
+    padding: 24px 20px;
+  }
+
+  .promo-title {
+    font-size: 24px !important;
+  }
+
+  .promo-logo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .promo-icon {
+    font-size: 32px;
+  }
+
+  .form-side {
+    padding: 16px 12px;
+  }
+
+  .ant-card-body {
+    padding: 24px 20px !important;
+  }
+
+  .login-title {
+    font-size: 22px !important;
+  }
+
+  .ant-form-item {
+    margin-bottom: 18px;
+  }
+
+  .login-button {
+    height: 46px;
+    font-size: 14px;
+  }
+}
+
+/* Smooth scrollbar */
+.promo-side::-webkit-scrollbar,
+.form-side::-webkit-scrollbar {
+  width: 6px;
+}
+
+.promo-side::-webkit-scrollbar-track,
+.form-side::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.promo-side::-webkit-scrollbar-thumb,
+.form-side::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.promo-side::-webkit-scrollbar-thumb:hover,
+.form-side::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.form-side::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+.form-side::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+}
+
+.form-side::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
