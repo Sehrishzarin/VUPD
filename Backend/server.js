@@ -7,6 +7,16 @@ import http from "http";
 import { Server } from "socket.io";
 import path from "path";
 import { fileURLToPath } from "url";
+import dns from "dns";
+
+// Fix DNS SRV lookup issue on some Windows network setups
+dns.setDefaultResultOrder("ipv4first");
+try {
+  dns.setServers(["8.8.8.8", "8.8.4.4"]);
+} catch (e) {
+  // Fallback if custom DNS servers fail
+}
+
 
 // routes
 import authRoutes from "./routes/authRoutes.js";
