@@ -5,7 +5,7 @@ A MERN-stack web platform built to digitize exam invigilation logistics for Virt
 **Final Year Project** · Project ID `S25PROJECTD59AC` · Virtual University of Pakistan
 Developed by **Sehrish Zarin**, BS Computer Science
 
-[Project Documentation](#) · [Final Report](#)
+[Project Documentation](https://github.com/Sehrishzarin/VUPD/tree/main/Documentation) · [Final Report](https://docs.google.com/document/d/1D_FD53tJDuYTTmAlHKlqTfXPISdZnG2Re_XDF-FM5WQ/edit?usp=sharing)
 
 ---
 
